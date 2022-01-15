@@ -1,3 +1,5 @@
+var pageApiPhotos = 1;
+
 const postData = async (email, password) => {
     try {
         // let body = JSON.stringify({ email: email, password: password })
@@ -19,7 +21,6 @@ const postData = async (email, password) => {
 }
 
 const fillFeedCards = (posts) => {
-
     if (posts) {
         document.getElementById("idFormLogin").className = "col-md-6 d-none";
         posts.forEach(element => {
@@ -41,7 +42,7 @@ const fillFeedCards = (posts) => {
 
 const getImages = async (jwt) => {
     try {
-        const response = await fetch('http://localhost:3000/api/photos',
+        const response = await fetch(`http://localhost:3000/api/photos?page=${pageApiPhotos}`,
             {
                 method: 'GET',
                 headers: {
@@ -51,7 +52,7 @@ const getImages = async (jwt) => {
         const { data } = await response.json();
 
         if (data) {
-            console.log("data : ", data);
+            // console.log("data : ", data);
             fillFeedCards(data);
         } else {
             localStorage.clear();
@@ -63,7 +64,6 @@ const getImages = async (jwt) => {
         // alert(`${err.name} sda  `)
     }
 }
-
 
 formLogin.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -85,17 +85,23 @@ formLogin.addEventListener('submit', async (event) => {
     formLogin.reset();
 });
 
-
 btnLogout.addEventListener('click', () => {
     localStorage.clear();
     location.reload();
 });
 
+btnShowMore.addEventListener('click', () => {
+    const token = localStorage.getItem('jwt-token');
+    if (token) {
+        pageApiPhotos++;
+        getImages(token);
+    }
+});
 
 // FUNCION INVOCADA AL INICIO
 const init = async () => {
     const token = localStorage.getItem('jwt-token');
-    console.log("token inicial? : ", token);
+    // console.log("token inicial? : ", token);
     if (token) {
         getImages(token);
     }
