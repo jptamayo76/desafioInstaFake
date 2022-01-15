@@ -10,12 +10,18 @@ const postData = async (email, password) => {
                 method: 'POST',
                 body: JSON.stringify({ email: email, password: password })
             })
+
+        // console.log(response.ok);
         const { token } = await response.json();
         localStorage.setItem('jwt-token', token);
-        return token
+
+        if (token) {
+            return token
+        } else {
+            throw new Error("Credencial invalida");
+        }
     } catch (err) {
-        console.error("typeof : ", typeof err);
-        console.error(`Error: ${err} `);
+        console.error(`${err}`);
         alert("Credenciales invalidas");
     }
 }
@@ -77,7 +83,8 @@ formLogin.addEventListener('submit', async (event) => {
     if (JWT) {
         getImages(JWT);
     } else {
-        alert("Credenciales invalidas");
+        //alert("Credenciales invalidas");
+        // throw new Error("Credencial invalida");
     }
     formLogin.reset();
 });
