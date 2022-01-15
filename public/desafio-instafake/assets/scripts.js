@@ -74,14 +74,11 @@ formLogin.addEventListener('submit', async (event) => {
     const JWT = await postData(email, password);
     // console.log("JWT : ", JWT);
 
-    getImages(JWT);
-
-    // const posts = await getPosts(JWT);
-    //console.log(posts);     // UN ARREGLO DE OBJETOS - POSTS
-    // fillTable(posts);
-
-    // getPosts(JWT);
-    // getAlbums(JWT);
+    if (JWT) {
+        getImages(JWT);
+    } else {
+        alert("Credenciales invalidas");
+    }
     formLogin.reset();
 });
 
